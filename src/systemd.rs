@@ -1,6 +1,8 @@
 use anyhow::Result;
 use zbus::{dbus_proxy, Connection};
 
+use crate::display::ServiceStatus;
+
 pub struct Systemd {
     connection: Connection,
 }
@@ -38,6 +40,27 @@ pub enum UnitStatus {
         active_state: String,
         sub_state: String,
     },
+}
+
+impl From<UnitStatus> for ServiceStatus {
+    fn from(status: UnitStatus) -> Self {
+        match status {
+            UnitStatus::NotLoaded => Self::Unknown,
+            UnitStatus::Loaded {
+                active_state,
+                sub_state,
+            } => match (active_state.as_str(), sub_state.as_str()) {
+                ("active", "running") => Self::Running,
+                ("active", "exited") => Self::Ended,
+                ("inactive", "dead") => Self::Disabled,
+                ("failed", _) => Self::Failed,
+                ("activating", _) => Self::Changing,
+                ("deactivating", _) => Self::Changing,
+                ("reloading", _) => Self::Changing,
+                _ => Self::Unknown,
+            },
+        }
+    }
 }
 
 #[dbus_proxy(

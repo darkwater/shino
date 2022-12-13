@@ -4,11 +4,11 @@ use anyhow::Result;
 use clap::Parser;
 use dirs::config_dir;
 
-use crate::args::Args;
+use crate::commands::{Args, Command};
 
-mod args;
 mod commands;
 mod config;
+mod display;
 mod systemd;
 
 #[tokio::main]
@@ -44,6 +44,7 @@ async fn main() -> Result<()> {
     let config: config::Config = toml::from_str(&config)?;
 
     match args.command {
-        args::Command::List(args) => commands::list::run(args, config).await,
+        Command::List(args) => commands::list::run(args, config).await,
+        Command::Show(args) => commands::show::run(args, config).await,
     }
 }

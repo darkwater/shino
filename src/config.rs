@@ -7,5 +7,6 @@ pub struct Config {
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceConfig {
+    pub name: String,
     pub systemd_service: Option<String>,
 }
