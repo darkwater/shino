@@ -9,6 +9,7 @@ use crate::commands::{Args, Command};
 mod commands;
 mod config;
 mod display;
+mod service;
 mod systemd;
 
 #[tokio::main]

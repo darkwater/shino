@@ -4,7 +4,6 @@ use clap::Parser;
 use crate::{
     config::Config,
     display::{self, Service, ServiceDetails},
-    systemd::Systemd,
 };
 
 #[derive(Parser)]
@@ -18,20 +17,10 @@ pub async fn run(args: Args, config: Config) -> Result<()> {
         .services
         .iter()
         .find(|service| service.name.contains(&args.service)) else {
-            return Err(anyhow::anyhow!("Could not find service with name {}", args.service));
+            return Err(anyhow::anyhow!("Couldn't find service with name containing {:?}", args.service));
         };
 
-    if let Some(ref systemd_service) = service_config.systemd_service {
-        let systemd = Systemd::new().await?;
-        let status = systemd.get_unit_status(systemd_service).await?;
+    let service = Service::get_for(service_config.clone()).await?;
 
-        let service = Service {
-            config: service_config.clone(),
-            status: status.into(),
-        };
-
-        display::output(ServiceDetails { service })
-    } else {
-        Err(anyhow::anyhow!("Could not find systemd service for {}", args.service))
-    }
+    display::output(ServiceDetails { service })
 }
