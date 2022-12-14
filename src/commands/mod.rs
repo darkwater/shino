@@ -5,7 +5,7 @@ use clap::Parser;
 
 use crate::commands;
 
-#[derive(Parser)]
+#[derive(Clone, Parser)]
 pub struct Args {
     /// Path to the config file. If not specified, it will default to $XDG_CONFIG_HOME/shino/config.toml
     #[clap(short, long)]
@@ -19,7 +19,7 @@ pub struct Args {
     pub command: Command,
 }
 
-#[derive(Parser)]
+#[derive(Clone, Parser)]
 pub enum Command {
     #[clap(aliases = ["l", "ls"])]
     List(commands::list::Args),

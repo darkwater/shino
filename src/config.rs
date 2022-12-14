@@ -4,7 +4,13 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Config {
+    pub hostname: String,
+
+    #[serde(default)]
     pub services: Vec<ServiceConfig>,
+
+    #[serde(default)]
+    pub hosts: Vec<HostConfig>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -36,4 +42,10 @@ impl ServiceConfig {
         .flatten()
         .exactly_one()?)
     }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HostConfig {
+    pub name: String,
+    pub address: String,
 }

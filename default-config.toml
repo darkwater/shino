@@ -1,3 +1,5 @@
+hostname = "localhost"
+
 [[services]]
 name = "sshd"
 systemd_service = "sshd.service"

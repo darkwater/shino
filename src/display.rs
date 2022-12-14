@@ -4,16 +4,24 @@ use anyhow::Result;
 use colored::Colorize;
 use serde::{Deserialize, Serialize};
 
-use crate::config::ServiceConfig;
+use crate::{
+    commands::Args,
+    config::{Config, ServiceConfig},
+};
 
-pub fn output(output: impl Display + Serialize) -> Result<()> {
-    println!("{}", output);
+pub fn output(args: Args, config: Config, output: impl Display + Serialize) -> Result<()> {
+    if args.json {
+        println!("{}", serde_json::to_string_pretty(&output)?);
+    } else {
+        println!("{}", output);
+    }
+
     Ok(())
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ServiceStatusList {
-    pub services: Vec<Service>,
+    pub hostname_services: Vec<(String, Vec<Service>)>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -54,8 +62,12 @@ impl Display for Service {
 
 impl Display for ServiceStatusList {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for service in &self.services {
-            writeln!(f, "{service}")?;
+        for (hostname, services) in &self.hostname_services {
+            writeln!(f, "{}", hostname.bold().underline())?;
+            for service in services {
+                writeln!(f, "{service}")?;
+            }
+            writeln!(f)?;
         }
 
         Ok(())
@@ -69,6 +81,10 @@ impl Display for ServiceDetails {
 
         if let Some(ref systemd_service) = self.service.config.systemd_service {
             writeln!(f, "systemd service: {systemd_service}")?;
+        }
+
+        if let Some(ref docker_container) = self.service.config.docker_container {
+            writeln!(f, "docker container: {docker_container}")?;
         }
 
         Ok(())

@@ -6,13 +6,13 @@ use crate::{
     display::{self, Service, ServiceDetails},
 };
 
-#[derive(Parser)]
+#[derive(Clone, Parser)]
 pub struct Args {
     /// The (partial) name of the service to show
     service: String,
 }
 
-pub async fn run(args: Args, config: Config) -> Result<()> {
+pub async fn run(args: Args, config: Config, all_args: super::Args) -> Result<()> {
     let Some(service_config) = config
         .services
         .iter()
@@ -22,5 +22,5 @@ pub async fn run(args: Args, config: Config) -> Result<()> {
 
     let service = Service::get_for(service_config.clone()).await?;
 
-    display::output(ServiceDetails { service })
+    display::output(all_args, config, ServiceDetails { service })
 }

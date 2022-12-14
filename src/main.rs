@@ -9,6 +9,7 @@ use crate::commands::{Args, Command};
 mod commands;
 mod config;
 mod display;
+mod remote;
 mod service;
 mod systemd;
 
@@ -19,7 +20,7 @@ async fn main() -> Result<()> {
     let args = Args::parse();
 
     let config_file = match args.config_file {
-        Some(path) => path,
+        Some(ref path) => path.clone(),
         None => {
             let mut path =
                 config_dir().ok_or_else(|| anyhow::anyhow!("Could not find config directory"))?;
@@ -44,8 +45,8 @@ async fn main() -> Result<()> {
     let config = fs::read_to_string(config_file)?;
     let config: config::Config = toml::from_str(&config)?;
 
-    match args.command {
-        Command::List(args) => commands::list::run(args, config).await,
-        Command::Show(args) => commands::show::run(args, config).await,
+    match args.clone().command {
+        Command::List(ref cargs) => commands::list::run(cargs.clone(), config, args).await,
+        Command::Show(ref cargs) => commands::show::run(cargs.clone(), config, args).await,
     }
 }
