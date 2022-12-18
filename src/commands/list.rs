@@ -1,18 +1,18 @@
-use anyhow::{Context, Result};
+use anyhow::{Context as _, Result};
 use clap::Parser;
 use futures::{stream::FuturesOrdered, TryStreamExt};
 
 use crate::{
-    config::Config,
     display::{self, Service, ServiceStatusList},
-    remote,
+    remote, Context,
 };
 
 #[derive(Clone, Parser)]
 pub struct Args {}
 
-pub async fn run(args: Args, config: Config, all_args: super::Args) -> Result<()> {
-    let services = config
+pub async fn run(_args: &Args, context: &Context) -> Result<()> {
+    let services = context
+        .config
         .services
         .iter()
         .map(|service| async {
@@ -24,7 +24,8 @@ pub async fn run(args: Args, config: Config, all_args: super::Args) -> Result<()
         .try_collect::<Vec<_>>()
         .await?;
 
-    let hosts = config
+    let hosts = context
+        .config
         .hosts
         .iter()
         .map(|host| async {
@@ -36,13 +37,13 @@ pub async fn run(args: Args, config: Config, all_args: super::Args) -> Result<()
         .try_collect::<Vec<_>>()
         .await?;
 
-    let mut ssl = ServiceStatusList {
-        hostname_services: vec![(config.hostname.clone(), services)],
+    let mut list = ServiceStatusList {
+        hostname_services: vec![(context.config.hostname.clone(), services)],
     };
 
     for mut host in hosts {
-        ssl.hostname_services.append(&mut host.hostname_services);
+        list.hostname_services.append(&mut host.hostname_services);
     }
 
-    display::output(all_args, config, ssl)
+    display::output(context, list)
 }

@@ -4,13 +4,10 @@ use anyhow::Result;
 use colored::Colorize;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    commands::Args,
-    config::{Config, ServiceConfig},
-};
+use crate::{config::ServiceConfig, Context};
 
-pub fn output(args: Args, config: Config, output: impl Display + Serialize) -> Result<()> {
-    if args.json {
+pub fn output(context: &Context, output: impl Display + Serialize) -> Result<()> {
+    if context.args.json {
         println!("{}", serde_json::to_string_pretty(&output)?);
     } else {
         println!("{}", output);
@@ -53,7 +50,7 @@ impl Display for Service {
             ServiceStatus::Failed => "[E]".red(),
             ServiceStatus::Disabled => "[X]".yellow(),
             ServiceStatus::Changing => "[R]".blue(),
-            ServiceStatus::Unknown => "[?]".bright_black(),
+            ServiceStatus::Unknown => "[?]".red(),
         };
 
         write!(f, "{} {}", icon, self.config.name)

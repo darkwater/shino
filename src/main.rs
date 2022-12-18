@@ -13,6 +13,11 @@ mod remote;
 mod service;
 mod systemd;
 
+pub struct Context {
+    config: config::Config,
+    args: Args,
+}
+
 #[tokio::main]
 async fn main() -> Result<()> {
     pretty_env_logger::init();
@@ -45,8 +50,10 @@ async fn main() -> Result<()> {
     let config = fs::read_to_string(config_file)?;
     let config: config::Config = toml::from_str(&config)?;
 
-    match args.clone().command {
-        Command::List(ref cargs) => commands::list::run(cargs.clone(), config, args).await,
-        Command::Show(ref cargs) => commands::show::run(cargs.clone(), config, args).await,
+    let context = Context { config, args };
+
+    match context.args.command {
+        Command::List(ref cargs) => commands::list::run(cargs, &context).await,
+        Command::Show(ref cargs) => commands::show::run(cargs, &context).await,
     }
 }

@@ -2,8 +2,8 @@ use anyhow::Result;
 use clap::Parser;
 
 use crate::{
-    config::Config,
     display::{self, Service, ServiceDetails},
+    Context,
 };
 
 #[derive(Clone, Parser)]
@@ -12,8 +12,8 @@ pub struct Args {
     service: String,
 }
 
-pub async fn run(args: Args, config: Config, all_args: super::Args) -> Result<()> {
-    let Some(service_config) = config
+pub async fn run(args: &Args, context: &Context) -> Result<()> {
+    let Some(service_config) = context.config
         .services
         .iter()
         .find(|service| service.name.contains(&args.service)) else {
@@ -22,5 +22,5 @@ pub async fn run(args: Args, config: Config, all_args: super::Args) -> Result<()
 
     let service = Service::get_for(service_config.clone()).await?;
 
-    display::output(all_args, config, ServiceDetails { service })
+    display::output(context, ServiceDetails { service })
 }
