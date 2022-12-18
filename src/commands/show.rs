@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{bail, Result};
 use clap::Parser;
 
 use crate::{
@@ -17,7 +17,7 @@ pub async fn run(args: &Args, context: &Context) -> Result<()> {
         .services
         .iter()
         .find(|service| service.name.contains(&args.service)) else {
-            return Err(anyhow::anyhow!("Couldn't find service with name containing {:?}", args.service));
+            bail!("Couldn't find service with name containing {:?}", args.service);
         };
 
     let service = Service::get_for(service_config.clone()).await?;

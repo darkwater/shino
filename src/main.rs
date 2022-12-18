@@ -1,6 +1,6 @@
 use std::fs;
 
-use anyhow::Result;
+use anyhow::{bail, Result};
 use clap::Parser;
 use dirs::config_dir;
 
@@ -27,8 +27,9 @@ async fn main() -> Result<()> {
     let config_file = match args.config_file {
         Some(ref path) => path.clone(),
         None => {
-            let mut path =
-                config_dir().ok_or_else(|| anyhow::anyhow!("Could not find config directory"))?;
+            let Some(mut path) = config_dir() else {
+                bail!("Could not find config directory");
+            };
             path.push("shino");
 
             if !path.exists() {
@@ -41,9 +42,7 @@ async fn main() -> Result<()> {
                 fs::write(&path, include_str!("../default-config.toml"))?;
             }
 
-            path.to_str()
-                .ok_or_else(|| anyhow::anyhow!("Could not convert path to string"))?
-                .to_string()
+            path.to_string_lossy().to_string()
         }
     };
 
