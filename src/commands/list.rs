@@ -32,6 +32,15 @@ pub async fn run(_args: &Args, context: &Context) -> Result<()> {
             remote::get_services(host.clone())
                 .await
                 .context(format!("Couldn't get services for {:?}", host.name))
+                .map(|mut list| {
+                    list.hostname_services.iter_mut().for_each(|(hostname, _)| {
+                        if *hostname != host.name {
+                            hostname.insert_str(0, &format!("{}/", host.name));
+                        }
+                    });
+
+                    list
+                })
         })
         .collect::<FuturesOrdered<_>>()
         .try_collect::<Vec<_>>()
