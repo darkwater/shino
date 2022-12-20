@@ -1,6 +1,12 @@
+use std::time::Duration;
+
 use anyhow::{Context as _, Result};
 use clap::Parser;
-use futures::{stream::FuturesOrdered, TryStreamExt};
+use futures::{
+    stream::{FuturesOrdered, FuturesUnordered},
+    TryStreamExt,
+};
+use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 
 use crate::{
     display::{self, Service, ServiceStatusList},
@@ -24,12 +30,24 @@ pub async fn run(_args: &Args, context: &Context) -> Result<()> {
         .try_collect::<Vec<_>>()
         .await?;
 
+    let progress = MultiProgress::new();
+
     let hosts = context
         .config
         .hosts
         .iter()
         .map(|host| async {
-            remote::get_services(host.clone())
+            let pb = progress.add(ProgressBar::new_spinner());
+            pb.enable_steady_tick(Duration::from_millis(150));
+            pb.set_style(
+                ProgressStyle::with_template("{spinner:.green} {msg} ({elapsed})")
+                    .unwrap()
+                    .tick_strings(&[".  ", ".. ", "...", " ..", "  .", "   ", " ✓ "]),
+            );
+
+            pb.set_message(host.name.clone());
+
+            let res = remote::get_services(host.clone())
                 .await
                 .context(format!("Couldn't get services for {:?}", host.name))
                 .map(|mut list| {
@@ -40,11 +58,17 @@ pub async fn run(_args: &Args, context: &Context) -> Result<()> {
                     });
 
                     list
-                })
+                });
+
+            pb.finish();
+
+            res
         })
-        .collect::<FuturesOrdered<_>>()
+        .collect::<FuturesUnordered<_>>()
         .try_collect::<Vec<_>>()
         .await?;
+
+    let _ = progress.clear();
 
     let mut list = ServiceStatusList {
         hostname_services: vec![(context.config.hostname.clone(), services)],
