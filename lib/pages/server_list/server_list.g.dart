@@ -6,7 +6,7 @@ part of 'server_list.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sshClientHash() => r'ed18a1882a4751340494c187c6ab0f4c18f00be3';
+String _$sshClientHash() => r'aae5a4f32167f1519420e73ed9bf2b0df091f097';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -154,29 +154,29 @@ class _SshClientProviderElement
   ServerDetails get details => (origin as SshClientProvider).details;
 }
 
-String _$unameHash() => r'33f30697f084e8ad4b7dfcd2432c2603296a0c33';
+String _$distroIconHash() => r'433be3353fc06d519063fcfd684b43ed208500a9';
 
-/// See also [uname].
-@ProviderFor(uname)
-const unameProvider = UnameFamily();
+/// See also [distroIcon].
+@ProviderFor(distroIcon)
+const distroIconProvider = DistroIconFamily();
 
-/// See also [uname].
-class UnameFamily extends Family<AsyncValue<String>> {
-  /// See also [uname].
-  const UnameFamily();
+/// See also [distroIcon].
+class DistroIconFamily extends Family<AsyncValue<IconData>> {
+  /// See also [distroIcon].
+  const DistroIconFamily();
 
-  /// See also [uname].
-  UnameProvider call(
+  /// See also [distroIcon].
+  DistroIconProvider call(
     ServerDetails details,
   ) {
-    return UnameProvider(
+    return DistroIconProvider(
       details,
     );
   }
 
   @override
-  UnameProvider getProviderOverride(
-    covariant UnameProvider provider,
+  DistroIconProvider getProviderOverride(
+    covariant DistroIconProvider provider,
   ) {
     return call(
       provider.details,
@@ -195,31 +195,32 @@ class UnameFamily extends Family<AsyncValue<String>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'unameProvider';
+  String? get name => r'distroIconProvider';
 }
 
-/// See also [uname].
-class UnameProvider extends AutoDisposeFutureProvider<String> {
-  /// See also [uname].
-  UnameProvider(
+/// See also [distroIcon].
+class DistroIconProvider extends AutoDisposeFutureProvider<IconData> {
+  /// See also [distroIcon].
+  DistroIconProvider(
     ServerDetails details,
   ) : this._internal(
-          (ref) => uname(
-            ref as UnameRef,
+          (ref) => distroIcon(
+            ref as DistroIconRef,
             details,
           ),
-          from: unameProvider,
-          name: r'unameProvider',
+          from: distroIconProvider,
+          name: r'distroIconProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$unameHash,
-          dependencies: UnameFamily._dependencies,
-          allTransitiveDependencies: UnameFamily._allTransitiveDependencies,
+                  : _$distroIconHash,
+          dependencies: DistroIconFamily._dependencies,
+          allTransitiveDependencies:
+              DistroIconFamily._allTransitiveDependencies,
           details: details,
         );
 
-  UnameProvider._internal(
+  DistroIconProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -233,12 +234,12 @@ class UnameProvider extends AutoDisposeFutureProvider<String> {
 
   @override
   Override overrideWith(
-    FutureOr<String> Function(UnameRef provider) create,
+    FutureOr<IconData> Function(DistroIconRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: UnameProvider._internal(
-        (ref) => create(ref as UnameRef),
+      override: DistroIconProvider._internal(
+        (ref) => create(ref as DistroIconRef),
         from: from,
         name: null,
         dependencies: null,
@@ -250,13 +251,13 @@ class UnameProvider extends AutoDisposeFutureProvider<String> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<String> createElement() {
-    return _UnameProviderElement(this);
+  AutoDisposeFutureProviderElement<IconData> createElement() {
+    return _DistroIconProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UnameProvider && other.details == details;
+    return other is DistroIconProvider && other.details == details;
   }
 
   @override
@@ -268,17 +269,17 @@ class UnameProvider extends AutoDisposeFutureProvider<String> {
   }
 }
 
-mixin UnameRef on AutoDisposeFutureProviderRef<String> {
+mixin DistroIconRef on AutoDisposeFutureProviderRef<IconData> {
   /// The parameter `details` of this provider.
   ServerDetails get details;
 }
 
-class _UnameProviderElement extends AutoDisposeFutureProviderElement<String>
-    with UnameRef {
-  _UnameProviderElement(super.provider);
+class _DistroIconProviderElement
+    extends AutoDisposeFutureProviderElement<IconData> with DistroIconRef {
+  _DistroIconProviderElement(super.provider);
 
   @override
-  ServerDetails get details => (origin as UnameProvider).details;
+  ServerDetails get details => (origin as DistroIconProvider).details;
 }
 
 String _$keypairHash() => r'c91e3732e9b646a4533ec0d04da0697aad12f27b';
