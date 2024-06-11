@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shino/models/server_details.dart';
+import 'package:shino/providers/servers.dart';
 
-class ServerEditPage extends StatefulWidget {
+class ServerEditPage extends ConsumerStatefulWidget {
   final ServerDetails initial;
 
   const ServerEditPage({required this.initial, super.key});
@@ -10,10 +12,10 @@ class ServerEditPage extends StatefulWidget {
       builder: (_) => ServerEditPage(initial: ServerDetails.empty()));
 
   @override
-  State<ServerEditPage> createState() => _ServerEditPageState();
+  ConsumerState<ServerEditPage> createState() => _ServerEditPageState();
 }
 
-class _ServerEditPageState extends State<ServerEditPage> {
+class _ServerEditPageState extends ConsumerState<ServerEditPage> {
   late ServerDetails _serverDetails;
 
   final TextEditingController _nameController = TextEditingController();
@@ -67,6 +69,16 @@ class _ServerEditPageState extends State<ServerEditPage> {
             _serverDetails.copyWith(username: _usernameController.text);
       });
     });
+
+    if (_usernameController.text.isEmpty && !widget.initial.isSaved) {
+      try {
+        // default user name to the last one used
+        final server = ref.read(serverDetailsProvider).last;
+        _usernameController.text = server.username;
+      } catch (e) {
+        // never mind
+      }
+    }
   }
 
   @override

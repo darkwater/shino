@@ -6,7 +6,7 @@ part of 'server_list.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sshClientHash() => r'aae5a4f32167f1519420e73ed9bf2b0df091f097';
+String _$distroIconHash() => r'f6f75aac42dde459ef436b5a8722a1bb594b8b2d';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -28,133 +28,6 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
-
-/// See also [sshClient].
-@ProviderFor(sshClient)
-const sshClientProvider = SshClientFamily();
-
-/// See also [sshClient].
-class SshClientFamily extends Family<AsyncValue<SSHClient>> {
-  /// See also [sshClient].
-  const SshClientFamily();
-
-  /// See also [sshClient].
-  SshClientProvider call(
-    ServerDetails details,
-  ) {
-    return SshClientProvider(
-      details,
-    );
-  }
-
-  @override
-  SshClientProvider getProviderOverride(
-    covariant SshClientProvider provider,
-  ) {
-    return call(
-      provider.details,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'sshClientProvider';
-}
-
-/// See also [sshClient].
-class SshClientProvider extends AutoDisposeFutureProvider<SSHClient> {
-  /// See also [sshClient].
-  SshClientProvider(
-    ServerDetails details,
-  ) : this._internal(
-          (ref) => sshClient(
-            ref as SshClientRef,
-            details,
-          ),
-          from: sshClientProvider,
-          name: r'sshClientProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$sshClientHash,
-          dependencies: SshClientFamily._dependencies,
-          allTransitiveDependencies: SshClientFamily._allTransitiveDependencies,
-          details: details,
-        );
-
-  SshClientProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.details,
-  }) : super.internal();
-
-  final ServerDetails details;
-
-  @override
-  Override overrideWith(
-    FutureOr<SSHClient> Function(SshClientRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: SshClientProvider._internal(
-        (ref) => create(ref as SshClientRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        details: details,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<SSHClient> createElement() {
-    return _SshClientProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is SshClientProvider && other.details == details;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, details.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-mixin SshClientRef on AutoDisposeFutureProviderRef<SSHClient> {
-  /// The parameter `details` of this provider.
-  ServerDetails get details;
-}
-
-class _SshClientProviderElement
-    extends AutoDisposeFutureProviderElement<SSHClient> with SshClientRef {
-  _SshClientProviderElement(super.provider);
-
-  @override
-  ServerDetails get details => (origin as SshClientProvider).details;
-}
-
-String _$distroIconHash() => r'433be3353fc06d519063fcfd684b43ed208500a9';
 
 /// See also [distroIcon].
 @ProviderFor(distroIcon)

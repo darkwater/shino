@@ -1,27 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'servers.dart';
+part of 'card.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverDetailsHash() => r'297d2eb323e48cdf06410905b1111122248ae174';
-
-/// See also [serverDetails].
-@ProviderFor(serverDetails)
-final serverDetailsProvider = AutoDisposeProvider<List<ServerDetails>>.internal(
-  serverDetails,
-  name: r'serverDetailsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$serverDetailsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef ServerDetailsRef = AutoDisposeProviderRef<List<ServerDetails>>;
-String _$sshClientHash() => r'aae5a4f32167f1519420e73ed9bf2b0df091f097';
+String _$loadHash() => r'f189e702e0bff5751d8e77820866a5eb1eb84f5b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -44,27 +29,27 @@ class _SystemHash {
   }
 }
 
-/// See also [sshClient].
-@ProviderFor(sshClient)
-const sshClientProvider = SshClientFamily();
+/// See also [_load].
+@ProviderFor(_load)
+const _loadProvider = _LoadFamily();
 
-/// See also [sshClient].
-class SshClientFamily extends Family<AsyncValue<SSHClient>> {
-  /// See also [sshClient].
-  const SshClientFamily();
+/// See also [_load].
+class _LoadFamily extends Family<AsyncValue<double>> {
+  /// See also [_load].
+  const _LoadFamily();
 
-  /// See also [sshClient].
-  SshClientProvider call(
+  /// See also [_load].
+  _LoadProvider call(
     ServerDetails details,
   ) {
-    return SshClientProvider(
+    return _LoadProvider(
       details,
     );
   }
 
   @override
-  SshClientProvider getProviderOverride(
-    covariant SshClientProvider provider,
+  _LoadProvider getProviderOverride(
+    covariant _LoadProvider provider,
   ) {
     return call(
       provider.details,
@@ -83,31 +68,29 @@ class SshClientFamily extends Family<AsyncValue<SSHClient>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'sshClientProvider';
+  String? get name => r'_loadProvider';
 }
 
-/// See also [sshClient].
-class SshClientProvider extends AutoDisposeFutureProvider<SSHClient> {
-  /// See also [sshClient].
-  SshClientProvider(
+/// See also [_load].
+class _LoadProvider extends AutoDisposeFutureProvider<double> {
+  /// See also [_load].
+  _LoadProvider(
     ServerDetails details,
   ) : this._internal(
-          (ref) => sshClient(
-            ref as SshClientRef,
+          (ref) => _load(
+            ref as _LoadRef,
             details,
           ),
-          from: sshClientProvider,
-          name: r'sshClientProvider',
+          from: _loadProvider,
+          name: r'_loadProvider',
           debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$sshClientHash,
-          dependencies: SshClientFamily._dependencies,
-          allTransitiveDependencies: SshClientFamily._allTransitiveDependencies,
+              const bool.fromEnvironment('dart.vm.product') ? null : _$loadHash,
+          dependencies: _LoadFamily._dependencies,
+          allTransitiveDependencies: _LoadFamily._allTransitiveDependencies,
           details: details,
         );
 
-  SshClientProvider._internal(
+  _LoadProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -121,12 +104,12 @@ class SshClientProvider extends AutoDisposeFutureProvider<SSHClient> {
 
   @override
   Override overrideWith(
-    FutureOr<SSHClient> Function(SshClientRef provider) create,
+    FutureOr<double> Function(_LoadRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: SshClientProvider._internal(
-        (ref) => create(ref as SshClientRef),
+      override: _LoadProvider._internal(
+        (ref) => create(ref as _LoadRef),
         from: from,
         name: null,
         dependencies: null,
@@ -138,13 +121,13 @@ class SshClientProvider extends AutoDisposeFutureProvider<SSHClient> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<SSHClient> createElement() {
-    return _SshClientProviderElement(this);
+  AutoDisposeFutureProviderElement<double> createElement() {
+    return _LoadProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is SshClientProvider && other.details == details;
+    return other is _LoadProvider && other.details == details;
   }
 
   @override
@@ -156,42 +139,42 @@ class SshClientProvider extends AutoDisposeFutureProvider<SSHClient> {
   }
 }
 
-mixin SshClientRef on AutoDisposeFutureProviderRef<SSHClient> {
+mixin _LoadRef on AutoDisposeFutureProviderRef<double> {
   /// The parameter `details` of this provider.
   ServerDetails get details;
 }
 
-class _SshClientProviderElement
-    extends AutoDisposeFutureProviderElement<SSHClient> with SshClientRef {
-  _SshClientProviderElement(super.provider);
+class _LoadProviderElement extends AutoDisposeFutureProviderElement<double>
+    with _LoadRef {
+  _LoadProviderElement(super.provider);
 
   @override
-  ServerDetails get details => (origin as SshClientProvider).details;
+  ServerDetails get details => (origin as _LoadProvider).details;
 }
 
-String _$serverModelHash() => r'b78988f66d7c0dab02de87ee76bb65ac03105874';
+String _$memoryHash() => r'c128f284b9c82fa849cc3aea436dcdaff85a6014';
 
-/// See also [serverModel].
-@ProviderFor(serverModel)
-const serverModelProvider = ServerModelFamily();
+/// See also [_memory].
+@ProviderFor(_memory)
+const _memoryProvider = _MemoryFamily();
 
-/// See also [serverModel].
-class ServerModelFamily extends Family<AsyncValue<GenericServer>> {
-  /// See also [serverModel].
-  const ServerModelFamily();
+/// See also [_memory].
+class _MemoryFamily extends Family<AsyncValue<double>> {
+  /// See also [_memory].
+  const _MemoryFamily();
 
-  /// See also [serverModel].
-  ServerModelProvider call(
+  /// See also [_memory].
+  _MemoryProvider call(
     ServerDetails details,
   ) {
-    return ServerModelProvider(
+    return _MemoryProvider(
       details,
     );
   }
 
   @override
-  ServerModelProvider getProviderOverride(
-    covariant ServerModelProvider provider,
+  _MemoryProvider getProviderOverride(
+    covariant _MemoryProvider provider,
   ) {
     return call(
       provider.details,
@@ -210,32 +193,31 @@ class ServerModelFamily extends Family<AsyncValue<GenericServer>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'serverModelProvider';
+  String? get name => r'_memoryProvider';
 }
 
-/// See also [serverModel].
-class ServerModelProvider extends AutoDisposeFutureProvider<GenericServer> {
-  /// See also [serverModel].
-  ServerModelProvider(
+/// See also [_memory].
+class _MemoryProvider extends AutoDisposeFutureProvider<double> {
+  /// See also [_memory].
+  _MemoryProvider(
     ServerDetails details,
   ) : this._internal(
-          (ref) => serverModel(
-            ref as ServerModelRef,
+          (ref) => _memory(
+            ref as _MemoryRef,
             details,
           ),
-          from: serverModelProvider,
-          name: r'serverModelProvider',
+          from: _memoryProvider,
+          name: r'_memoryProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$serverModelHash,
-          dependencies: ServerModelFamily._dependencies,
-          allTransitiveDependencies:
-              ServerModelFamily._allTransitiveDependencies,
+                  : _$memoryHash,
+          dependencies: _MemoryFamily._dependencies,
+          allTransitiveDependencies: _MemoryFamily._allTransitiveDependencies,
           details: details,
         );
 
-  ServerModelProvider._internal(
+  _MemoryProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -249,12 +231,12 @@ class ServerModelProvider extends AutoDisposeFutureProvider<GenericServer> {
 
   @override
   Override overrideWith(
-    FutureOr<GenericServer> Function(ServerModelRef provider) create,
+    FutureOr<double> Function(_MemoryRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: ServerModelProvider._internal(
-        (ref) => create(ref as ServerModelRef),
+      override: _MemoryProvider._internal(
+        (ref) => create(ref as _MemoryRef),
         from: from,
         name: null,
         dependencies: null,
@@ -266,13 +248,13 @@ class ServerModelProvider extends AutoDisposeFutureProvider<GenericServer> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<GenericServer> createElement() {
-    return _ServerModelProviderElement(this);
+  AutoDisposeFutureProviderElement<double> createElement() {
+    return _MemoryProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ServerModelProvider && other.details == details;
+    return other is _MemoryProvider && other.details == details;
   }
 
   @override
@@ -284,18 +266,17 @@ class ServerModelProvider extends AutoDisposeFutureProvider<GenericServer> {
   }
 }
 
-mixin ServerModelRef on AutoDisposeFutureProviderRef<GenericServer> {
+mixin _MemoryRef on AutoDisposeFutureProviderRef<double> {
   /// The parameter `details` of this provider.
   ServerDetails get details;
 }
 
-class _ServerModelProviderElement
-    extends AutoDisposeFutureProviderElement<GenericServer>
-    with ServerModelRef {
-  _ServerModelProviderElement(super.provider);
+class _MemoryProviderElement extends AutoDisposeFutureProviderElement<double>
+    with _MemoryRef {
+  _MemoryProviderElement(super.provider);
 
   @override
-  ServerDetails get details => (origin as ServerModelProvider).details;
+  ServerDetails get details => (origin as _MemoryProvider).details;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

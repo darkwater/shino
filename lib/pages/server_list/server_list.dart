@@ -1,49 +1,28 @@
 import 'dart:convert';
 
-import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pinenacl/ed25519.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shino/models/keypair.dart';
 import 'package:shino/models/server_details.dart';
 import 'package:shino/pages/server_list/server_edit.dart';
 import 'package:shino/providers/servers.dart';
 
+import 'card.dart';
+
 part 'server_list.g.dart';
-
-@riverpod
-Future<SSHClient> sshClient(SshClientRef ref, ServerDetails details) async {
-  final key = await Keypair.get();
-
-  return SSHClient(
-    await SSHSocket.connect(details.host, details.port),
-    username: details.username,
-    identities: [
-      OpenSSHEd25519KeyPair(
-        key.publicKey.toUint8List(),
-        key.privateKey.toUint8List(),
-        "",
-      )
-    ],
-    // printDebug: (msg) => print("SSH[D]: $msg"),
-    // printTrace: (msg) => print("SSH[T]: $msg"),
-  );
-}
 
 @riverpod
 Future<IconData> distroIcon(DistroIconRef ref, ServerDetails details) async {
   final client = await ref.watch(sshClientProvider(details).future);
   final uname = utf8.decode(await client.run("uname"));
-  print(uname);
   if (uname.contains("Darwin")) {
     return MdiIcons.apple;
   }
 
   final issue = utf8.decode(await client.run("cat /etc/issue"));
-  print(issue);
   if (issue.contains("Ubuntu")) {
     return MdiIcons.ubuntu;
   } else if (issue.contains("Debian")) {
@@ -110,73 +89,69 @@ class ServerListPage extends ConsumerWidget {
       body: RefreshIndicator(
         onRefresh: () async {
           final servers = ref.read(serverDetailsProvider);
-          for (final server in servers) {
-            ref.refresh(sshClientProvider(server));
-          }
+          await Future.wait(
+            servers.map(
+              (server) => ref.refresh(sshClientProvider(server).future),
+            ),
+          );
         },
         child: ListView(
           children: [
             for (final server in ref.watch(serverDetailsProvider))
-              ListTile(
-                title: Text(server.name),
-                subtitle: Text(
-                  server.port == 22
-                      ? server.host
-                      : "${server.host}:${server.port}",
-                ),
-                trailing: ref.watch(distroIconProvider(server)).when(
-                      data: (icon) => Icon(
-                        icon,
-                        color: Colors.green,
-                      ),
-                      error: (e, st) {
-                        print(e);
-                        return const Icon(
-                          Icons.warning_amber,
-                          color: Colors.amber,
-                        );
-                      },
-                      loading: () => const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    ),
-                onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   ServerEditPage.route(server),
-                  // );
-                },
-                onLongPress: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text("Delete ${server.name}?"),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text("Cancel"),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              server.delete();
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              "Delete",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
+              ServerListCard(server),
+            // trailing: ref.watch(distroIconProvider(server)).when(
+            //       data: (icon) => Icon(
+            //         icon,
+            //         color: Colors.green,
+            //       ),
+            //       error: (e, st) {
+            //         log(e.toString());
+            //         return const Icon(
+            //           Icons.warning_amber,
+            //           color: Colors.amber,
+            //         );
+            //       },
+            //       loading: () => const SizedBox(
+            //         width: 24,
+            //         height: 24,
+            //         child: CircularProgressIndicator(strokeWidth: 2),
+            //       ),
+            //     ),
+            // onTap: () {
+            //   Navigator.push(
+            //     context,
+            //     OverviewPage.route(server),
+            //   );
+            // },
+            // onLongPress: () {
+            //   showDialog(
+            //     context: context,
+            //     builder: (context) {
+            //       return AlertDialog(
+            //         title: Text("Delete ${server.name}?"),
+            //         actions: [
+            //           TextButton(
+            //             onPressed: () {
+            //               Navigator.pop(context);
+            //             },
+            //             child: const Text("Cancel"),
+            //           ),
+            //           TextButton(
+            //             onPressed: () {
+            //               server.delete();
+            //               Navigator.pop(context);
+            //             },
+            //             child: const Text(
+            //               "Delete",
+            //               style: TextStyle(color: Colors.red),
+            //             ),
+            //           ),
+            //         ],
+            //       );
+            //     },
+            //   );
+            // },
+            // ),
           ],
         ),
       ),
