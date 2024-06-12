@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shino/models/server_details.dart';
+import 'package:shino/pages/server/overview.dart';
 import 'package:shino/providers/servers.dart';
 
 part 'card.g.dart';
@@ -37,32 +38,40 @@ class ServerListCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: ListTile(
-                  title: Text(server.name),
-                  subtitle: Text(
-                    server.port == 22
-                        ? server.host
-                        : "${server.host}:${server.port}",
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push<void>(
+            OverviewPage.route(server),
+          );
+        },
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    title: Text(server.name),
+                    subtitle: Text(
+                      server.port == 22
+                          ? server.host
+                          : "${server.host}:${server.port}",
+                    ),
                   ),
                 ),
-              ),
-              _MiniGauge(
-                icon: Icons.speed,
-                value: ref.watch(_loadProvider(server)),
-              ),
-              _MiniGauge(
-                icon: Icons.memory,
-                value: ref.watch(_memoryProvider(server)),
-              ),
-              const SizedBox(width: 10),
-            ],
-          ),
-        ],
+                _MiniGauge(
+                  icon: Icons.speed,
+                  value: ref.watch(_loadProvider(server)),
+                ),
+                _MiniGauge(
+                  icon: Icons.memory,
+                  value: ref.watch(_memoryProvider(server)),
+                ),
+                const SizedBox(width: 10),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -82,6 +91,7 @@ class _MiniGauge extends StatelessWidget {
 
     if (value.hasError) {
       print(value.error);
+      print(value.stackTrace);
     }
 
     return Padding(
