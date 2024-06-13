@@ -1,3 +1,8 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'bytes.g.dart';
+
+@JsonSerializable()
 class Bytes {
   final int value;
 
@@ -23,6 +28,10 @@ class Bytes {
   Bytes operator -(Bytes other) => Bytes(bytes: value - other.value);
   Bytes operator *(int other) => Bytes(bytes: value * other);
   double operator /(Bytes other) => value.toDouble() / other.value.toDouble();
+  bool operator <(Bytes other) => value < other.value;
+  bool operator <=(Bytes other) => value <= other.value;
+  bool operator >(Bytes other) => value > other.value;
+  bool operator >=(Bytes other) => value >= other.value;
 
   @override
   String toString() {
@@ -39,4 +48,7 @@ class Bytes {
 
   @override
   int get hashCode => value.hashCode;
+
+  factory Bytes.fromJson(int json) => Bytes(bytes: json);
+  int toJson() => value;
 }

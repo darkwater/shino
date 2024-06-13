@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shino/models/filesystem.dart';
 import 'package:shino/models/memory.dart';
 import 'package:shino/models/server_details.dart';
 import 'package:shino/pages/server/overview.dart';
@@ -31,6 +32,23 @@ Future<Memory> _memory(_MemoryRef ref, ServerDetails details) async {
   return await server.memoryUsage();
 }
 
+@riverpod
+Future<Filesystem> _filesystem(
+  _FilesystemRef ref,
+  ServerDetails details,
+) async {
+  final server = await ref.watch(serverModelProvider(details).future);
+
+  Timer(const Duration(seconds: 5), () => ref.invalidateSelf());
+
+  final filesystems = await server.filesystems();
+  filesystems.sort(
+    (a, b) => a.mountpoint.length.compareTo(b.mountpoint.length),
+  );
+
+  return filesystems.first;
+}
+
 class ServerListCard extends ConsumerWidget {
   final ServerDetails server;
 
@@ -51,12 +69,15 @@ class ServerListCard extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: ListTile(
-                    title: Text(server.name),
-                    subtitle: Text(
-                      server.port == 22
-                          ? server.host
-                          : "${server.host}:${server.port}",
+                  // ListTile overrides cursor to default
+                  child: IgnorePointer(
+                    child: ListTile(
+                      title: Text(server.name),
+                      subtitle: Text(
+                        server.port == 22
+                            ? server.host
+                            : "${server.host}:${server.port}",
+                      ),
                     ),
                   ),
                 ),
@@ -68,6 +89,12 @@ class ServerListCard extends ConsumerWidget {
                   icon: Icons.memory,
                   value: ref
                       .watch(_memoryProvider(server))
+                      .whenData((mem) => mem.usage),
+                ),
+                _MiniGauge(
+                  icon: Icons.storage,
+                  value: ref
+                      .watch(_filesystemProvider(server))
                       .whenData((mem) => mem.usage),
                 ),
                 const SizedBox(width: 10),

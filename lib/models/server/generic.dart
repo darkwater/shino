@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:shino/models/bytes.dart';
 import 'package:shino/models/command.dart';
+import 'package:shino/models/filesystem.dart';
 import 'package:shino/models/memory.dart';
 
 import 'nixos.dart';
@@ -68,5 +69,37 @@ class GenericServer {
   Future<List<Command>> commands() async {
     final source = await runCommandUtf8("cat .shino");
     return Command.parse(source);
+  }
+
+  Future<List<Filesystem>> filesystems() async {
+    final source = await runCommandUtf8("df -k");
+    final lines = source.split("\n");
+    final headers = lines.first.split(RegExp(" +"));
+    final values = lines
+        .skip(1)
+        .where((line) => line.startsWith("/dev/"))
+        .map((line) => line.split(RegExp(" +")));
+
+    final named = values.map(
+      (line) => Map.fromIterables(headers.take(line.length), line),
+    );
+
+    return named
+        .map(
+          (fs) => Filesystem(
+            device: fs["Filesystem"]!,
+            total: Bytes(
+              bytes: int.parse((fs["1K-blocks"] ?? fs["1024-blocks"])!),
+            ),
+            used: Bytes(
+              bytes: int.parse(fs["Used"]!),
+            ),
+            available: Bytes(
+              bytes: int.parse(fs["Available"]!),
+            ),
+            mountpoint: fs["Mounted"]!,
+          ),
+        )
+        .toList();
   }
 }

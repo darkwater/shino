@@ -278,5 +278,133 @@ class _MemoryProviderElement extends AutoDisposeFutureProviderElement<Memory>
   @override
   ServerDetails get details => (origin as _MemoryProvider).details;
 }
+
+String _$filesystemHash() => r'5bb7d39989831ffe721c9d694a9be2656e20e6e1';
+
+/// See also [_filesystem].
+@ProviderFor(_filesystem)
+const _filesystemProvider = _FilesystemFamily();
+
+/// See also [_filesystem].
+class _FilesystemFamily extends Family<AsyncValue<Filesystem>> {
+  /// See also [_filesystem].
+  const _FilesystemFamily();
+
+  /// See also [_filesystem].
+  _FilesystemProvider call(
+    ServerDetails details,
+  ) {
+    return _FilesystemProvider(
+      details,
+    );
+  }
+
+  @override
+  _FilesystemProvider getProviderOverride(
+    covariant _FilesystemProvider provider,
+  ) {
+    return call(
+      provider.details,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'_filesystemProvider';
+}
+
+/// See also [_filesystem].
+class _FilesystemProvider extends AutoDisposeFutureProvider<Filesystem> {
+  /// See also [_filesystem].
+  _FilesystemProvider(
+    ServerDetails details,
+  ) : this._internal(
+          (ref) => _filesystem(
+            ref as _FilesystemRef,
+            details,
+          ),
+          from: _filesystemProvider,
+          name: r'_filesystemProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$filesystemHash,
+          dependencies: _FilesystemFamily._dependencies,
+          allTransitiveDependencies:
+              _FilesystemFamily._allTransitiveDependencies,
+          details: details,
+        );
+
+  _FilesystemProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.details,
+  }) : super.internal();
+
+  final ServerDetails details;
+
+  @override
+  Override overrideWith(
+    FutureOr<Filesystem> Function(_FilesystemRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: _FilesystemProvider._internal(
+        (ref) => create(ref as _FilesystemRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        details: details,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Filesystem> createElement() {
+    return _FilesystemProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _FilesystemProvider && other.details == details;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, details.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin _FilesystemRef on AutoDisposeFutureProviderRef<Filesystem> {
+  /// The parameter `details` of this provider.
+  ServerDetails get details;
+}
+
+class _FilesystemProviderElement
+    extends AutoDisposeFutureProviderElement<Filesystem> with _FilesystemRef {
+  _FilesystemProviderElement(super.provider);
+
+  @override
+  ServerDetails get details => (origin as _FilesystemProvider).details;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

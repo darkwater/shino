@@ -2,6 +2,9 @@ import 'package:shino/models/bytes.dart';
 import 'package:shino/models/memory.dart';
 import 'package:shino/models/server/generic.dart';
 
+// part 'macos.freezed.dart';
+// part 'macos.g.dart';
+
 class MacosServer extends GenericServer {
   MacosServer(super.client);
 
@@ -38,3 +41,18 @@ class MacosServer extends GenericServer {
     );
   }
 }
+
+// @freezed
+// @JsonSerializable(fieldRename: FieldRename.kebab)
+// class _DfOutput with _$DfOutput {
+//   const factory _DfOutput({
+//     required String name,
+//     required Bytes totalBlocks,
+//     required Bytes usedBlocks,
+//     required double usedPercent,
+//     required int inodesUsed,
+//     required int inodesFree,
+//     required double inodesUsedPercent,
+//     required String mountedOn,
+//   }) = __DfOutput;
+// }
