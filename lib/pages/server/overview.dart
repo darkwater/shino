@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shino/models/server/generic.dart';
+import 'package:shino/models/command.dart';
 import 'package:shino/models/server_details.dart';
 import 'package:shino/providers/servers.dart';
 

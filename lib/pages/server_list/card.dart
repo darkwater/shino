@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shino/models/memory.dart';
 import 'package:shino/models/server_details.dart';
 import 'package:shino/pages/server/overview.dart';
 import 'package:shino/providers/servers.dart';
@@ -22,7 +23,7 @@ Future<double> _load(_LoadRef ref, ServerDetails details) async {
 }
 
 @riverpod
-Future<double> _memory(_MemoryRef ref, ServerDetails details) async {
+Future<Memory> _memory(_MemoryRef ref, ServerDetails details) async {
   final server = await ref.watch(serverModelProvider(details).future);
 
   Timer(const Duration(seconds: 5), () => ref.invalidateSelf());
@@ -65,7 +66,9 @@ class ServerListCard extends ConsumerWidget {
                 ),
                 _MiniGauge(
                   icon: Icons.memory,
-                  value: ref.watch(_memoryProvider(server)),
+                  value: ref
+                      .watch(_memoryProvider(server))
+                      .whenData((mem) => mem.usage),
                 ),
                 const SizedBox(width: 10),
               ],

@@ -1,3 +1,5 @@
+import 'package:shino/models/bytes.dart';
+import 'package:shino/models/memory.dart';
 import 'package:shino/models/server/generic.dart';
 
 class MacosServer extends GenericServer {
@@ -8,7 +10,7 @@ class MacosServer extends GenericServer {
       int.parse(await runCommandUtf8("sysctl -n hw.physicalcpu"));
 
   @override
-  Future<double> memoryUsage() async {
+  Future<Memory> memoryUsage() async {
     final vmstat = await runCommandUtf8("vm_stat");
     final memsize = await runCommandUtf8("sysctl -n hw.memsize_usable");
 
@@ -28,9 +30,11 @@ class MacosServer extends GenericServer {
     );
 
     final total = int.parse(memsize);
-    final free = fields["Pages free"]! * pageSize;
-    final inactive = fields["Pages inactive"]! * pageSize;
+    final used = fields["Pages active"]! + (fields["Pages wired down"] ?? 0);
 
-    return 1 - (free + inactive) / total;
+    return Memory(
+      total: Bytes(bytes: total),
+      used: Bytes(bytes: used * pageSize),
+    );
   }
 }

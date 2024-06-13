@@ -152,14 +152,14 @@ class _LoadProviderElement extends AutoDisposeFutureProviderElement<double>
   ServerDetails get details => (origin as _LoadProvider).details;
 }
 
-String _$memoryHash() => r'c128f284b9c82fa849cc3aea436dcdaff85a6014';
+String _$memoryHash() => r'b9a7ce5aab75e654a7d845110a6cd2e322862dab';
 
 /// See also [_memory].
 @ProviderFor(_memory)
 const _memoryProvider = _MemoryFamily();
 
 /// See also [_memory].
-class _MemoryFamily extends Family<AsyncValue<double>> {
+class _MemoryFamily extends Family<AsyncValue<Memory>> {
   /// See also [_memory].
   const _MemoryFamily();
 
@@ -197,7 +197,7 @@ class _MemoryFamily extends Family<AsyncValue<double>> {
 }
 
 /// See also [_memory].
-class _MemoryProvider extends AutoDisposeFutureProvider<double> {
+class _MemoryProvider extends AutoDisposeFutureProvider<Memory> {
   /// See also [_memory].
   _MemoryProvider(
     ServerDetails details,
@@ -231,7 +231,7 @@ class _MemoryProvider extends AutoDisposeFutureProvider<double> {
 
   @override
   Override overrideWith(
-    FutureOr<double> Function(_MemoryRef provider) create,
+    FutureOr<Memory> Function(_MemoryRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -248,7 +248,7 @@ class _MemoryProvider extends AutoDisposeFutureProvider<double> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<double> createElement() {
+  AutoDisposeFutureProviderElement<Memory> createElement() {
     return _MemoryProviderElement(this);
   }
 
@@ -266,12 +266,12 @@ class _MemoryProvider extends AutoDisposeFutureProvider<double> {
   }
 }
 
-mixin _MemoryRef on AutoDisposeFutureProviderRef<double> {
+mixin _MemoryRef on AutoDisposeFutureProviderRef<Memory> {
   /// The parameter `details` of this provider.
   ServerDetails get details;
 }
 
-class _MemoryProviderElement extends AutoDisposeFutureProviderElement<double>
+class _MemoryProviderElement extends AutoDisposeFutureProviderElement<Memory>
     with _MemoryRef {
   _MemoryProviderElement(super.provider);
 
