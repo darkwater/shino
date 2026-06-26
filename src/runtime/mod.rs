@@ -1,3 +1,5 @@
+mod logging;
+
 use wasmtime::{Engine, component::Linker};
 
 use crate::worker::Worker;
@@ -12,6 +14,7 @@ impl Runtime {
         let engine = Engine::default();
         let mut linker = Linker::new(&engine);
         wasmtime_wasi::p2::add_to_linker_sync(&mut linker).unwrap();
+        self::logging::add_to_linker(&mut linker);
 
         Self { engine, linker }
     }

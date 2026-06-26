@@ -1,0 +1,5 @@
+package shino:rt@0.1.0;
+
+world runtime {
+    import logging;
+}

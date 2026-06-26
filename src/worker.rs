@@ -7,6 +7,8 @@ use wasmtime_wasi::{WasiCtx, WasiCtxView, WasiView};
 use crate::runtime::Runtime;
 
 pub struct Worker {
+    pub module_name: String,
+
     pub wasi_ctx: WasiCtx,
     pub resource_table: ResourceTable,
 }
@@ -15,11 +17,12 @@ impl Worker {
     pub fn spawn(path: &Path, runtime: &Runtime) -> wasmtime::Result<()> {
         let component = Component::from_file(runtime.engine(), path)?;
 
-        // Create a WASI context and put it in a Store; all instances in the store
-        // share this context. `WasiCtx` provides a number of ways to
-        // configure what the target program will have access to.
-        let wasi = WasiCtx::builder().inherit_stdio().build();
+        let mut wasi = WasiCtx::builder();
+        let wasi = wasi.build();
+
         let state = Worker {
+            module_name: path.file_stem().unwrap().to_string_lossy().to_string(),
+
             wasi_ctx: wasi,
             resource_table: ResourceTable::new(),
         };
@@ -49,6 +52,8 @@ impl Worker {
             let (result,) = func.call(&mut store, ()).unwrap();
 
             result.unwrap();
+
+            log::warn!("Worker has exited");
         });
 
         Ok(())
